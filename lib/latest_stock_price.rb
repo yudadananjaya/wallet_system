@@ -10,17 +10,19 @@ class LatestStockPrice
   end
 
   def price(symbol)
-    response = request("/price?symbol=#{symbol}")
+    response = request("/equities-search?Search=#{symbol}")
     JSON.parse(response.body)
   end
 
   def prices(symbols)
-    response = request("/prices?symbols=#{symbols.join(',')}")
+    symbols_string = symbols.join(',')  # "ZOMA.NS,TATADVRA.NS"
+    encoded_symbols = URI.encode_www_form_component(symbols_string)  # "ZOMA.NS%2CTATADVRA.NS"
+    response = request("/equities-enhanced?Symbols=#{encoded_symbols}")
     JSON.parse(response.body)
   end
 
   def price_all
-    response = request('/price_all')
+    response = request('/equities')
     JSON.parse(response.body)
   end
 

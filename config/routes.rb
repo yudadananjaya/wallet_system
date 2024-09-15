@@ -10,8 +10,10 @@ Rails.application.routes.draw do
   # Define routes for Transactions
   resources :transactions, only: [:index, :show, :create]
 
-  # Define routes for Stock Price API
-  get 'stock_price', to: 'stock_price#index'
+  # Define routes for Stock Prices
+  get 'stock_prices/:symbol', to: 'stock_prices#show', as: 'stock_price'
+  get 'stock_prices', to: 'stock_prices#index'
+  post 'stock_prices/multiple', to: 'stock_prices#multiple'
 
   # Define route for Sessions (login)
   post 'sessions', to: 'sessions#create'
@@ -27,4 +29,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
 end
