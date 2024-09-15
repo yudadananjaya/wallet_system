@@ -2,19 +2,21 @@ Rails.application.routes.draw do
   resources :sessions, only: [:create, :destroy]
 
   # Define routes for Wallets
-  resources :wallets, only: [:create, :show, :update]
+  resources :wallets, only: [:index, :show, :create, :update] do
+    # Route for transactions in a specific wallet
+    get 'transactions', to: 'transactions#wallet_transactions', as: 'transactions'
+  end
 
   # Define routes for Transactions
-  resources :transactions, only: [:create, :show]
+  resources :transactions, only: [:index, :show, :create]
 
   # Define routes for Stock Price API
   get 'stock_price', to: 'stock_price#index'
 
   # Define route for Sessions (login)
   post 'sessions', to: 'sessions#create'
+  delete 'sessions', to: 'sessions#destroy'
   
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

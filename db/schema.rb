@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_14_071006) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_15_180451) do
+  create_table "sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "session_token", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_token"], name: "index_sessions_on_session_token", unique: true
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
     t.decimal "price"
@@ -25,14 +34,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_14_071006) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.decimal "amount"
-    t.integer "source_wallet_id", null: false
-    t.integer "target_wallet_id", null: false
-    t.integer "transaction_type"
+    t.integer "source_wallet_id"
+    t.integer "target_wallet_id"
+    t.decimal "amount", precision: 15, scale: 2
+    t.integer "transaction_type", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type"
     t.index ["source_wallet_id"], name: "index_transactions_on_source_wallet_id"
     t.index ["target_wallet_id"], name: "index_transactions_on_target_wallet_id"
+    t.index ["type"], name: "index_transactions_on_type"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,14 +54,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_14_071006) do
   end
 
   create_table "wallets", force: :cascade do |t|
-    t.decimal "balance"
     t.string "walletable_type", null: false
     t.integer "walletable_id", null: false
+    t.decimal "balance", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["walletable_type", "walletable_id"], name: "index_wallets_on_walletable"
   end
 
-  add_foreign_key "transactions", "source_wallets"
-  add_foreign_key "transactions", "target_wallets"
+  add_foreign_key "transactions", "wallets", column: "source_wallet_id"
+  add_foreign_key "transactions", "wallets", column: "target_wallet_id"
 end
