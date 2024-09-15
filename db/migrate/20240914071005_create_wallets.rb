@@ -1,8 +1,8 @@
-class CreateWallets < ActiveRecord::Migration[7.2]
+class CreateWallets < ActiveRecord::Migration[6.1]
   def change
     create_table :wallets do |t|
-      t.decimal :balance
       t.references :walletable, polymorphic: true, null: false
+      t.decimal :balance, precision: 15, scale: 2, default: 0.0
 
       t.timestamps
     end
