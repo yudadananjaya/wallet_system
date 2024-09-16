@@ -10,10 +10,13 @@ Rails.application.routes.draw do
   # Define routes for Transactions
   resources :transactions, only: [:index, :show, :create]
 
-  # Define routes for Stock Prices
-  get 'stock_prices/:symbol', to: 'stock_prices#show', as: 'stock_price'
-  get 'stock_prices', to: 'stock_prices#index'
-  post 'stock_prices/multiple', to: 'stock_prices#multiple'
+  # Stock Transactions
+  post 'stock_transactions/buy', to: 'stock_transactions#buy'
+  post 'stock_transactions/sell', to: 'stock_transactions#sell'
+
+  # Define routes for Stock Info
+  get 'stock_info', to: 'stock_info#index'
+  post 'stock_info/filtered', to: 'stock_info#filtered'
 
   # Define route for Sessions (login)
   post 'sessions', to: 'sessions#create'
@@ -29,5 +32,14 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # Route for fetching all stock transactions
+  get 'stock_transactions', to: 'stock_transactions#index', as: 'all_stock_transactions'
+
+  # Route for fetching stock transactions by wallet ID
+  get 'wallets/:wallet_id/stock_transactions', to: 'stock_transactions#by_wallet', as: 'wallet_stock_transactions'
+
+  # Route for fetching a specific stock transaction by ID
+  get 'stock_transactions/:id', to: 'stock_transactions#show', as: 'stock_transaction'
 
 end

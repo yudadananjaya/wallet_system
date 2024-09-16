@@ -1,4 +1,3 @@
-# app/services/wallet_service.rb
 class WalletService
     def self.transfer_funds(source_wallet, target_wallet, amount)
       ApplicationRecord.transaction do
