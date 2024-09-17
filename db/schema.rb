@@ -11,17 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2024_09_16_102855) do
-  create_table "equities", force: :cascade do |t|
-    t.integer "wallet_id", null: false
-    t.string "symbol", null: false
-    t.decimal "quantity", precision: 15, scale: 2, default: "0.0"
-    t.decimal "price", precision: 15, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["wallet_id", "symbol"], name: "index_equities_on_wallet_id_and_symbol", unique: true
-    t.index ["wallet_id"], name: "index_equities_on_wallet_id"
-  end
-
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "session_token", null: false
@@ -41,18 +30,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_102855) do
     t.index ["wallet_id"], name: "index_stock_equities_on_wallet_id"
   end
 
-  create_table "stock_equity_transactions", force: :cascade do |t|
-    t.integer "wallet_id", null: false
-    t.integer "stock_equity_id", null: false
-    t.decimal "price", precision: 15, scale: 2
-    t.integer "quantity"
-    t.integer "transaction_type", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["stock_equity_id"], name: "index_stock_equity_transactions_on_stock_equity_id"
-    t.index ["wallet_id"], name: "index_stock_equity_transactions_on_wallet_id"
-  end
-
   create_table "stock_transactions", force: :cascade do |t|
     t.integer "wallet_id", null: false
     t.integer "stock_equity_id", null: false
@@ -63,13 +40,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_102855) do
     t.datetime "updated_at", null: false
     t.index ["stock_equity_id"], name: "index_stock_transactions_on_stock_equity_id"
     t.index ["wallet_id"], name: "index_stock_transactions_on_wallet_id"
-  end
-
-  create_table "stocks", force: :cascade do |t|
-    t.string "symbol"
-    t.decimal "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
@@ -107,10 +77,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_102855) do
     t.index ["walletable_type", "walletable_id"], name: "index_wallets_on_walletable"
   end
 
-  add_foreign_key "equities", "wallets"
   add_foreign_key "stock_equities", "wallets"
-  add_foreign_key "stock_equity_transactions", "stock_equities"
-  add_foreign_key "stock_equity_transactions", "wallets"
   add_foreign_key "stock_transactions", "stock_equities"
   add_foreign_key "stock_transactions", "wallets"
   add_foreign_key "transactions", "wallets", column: "source_wallet_id"
