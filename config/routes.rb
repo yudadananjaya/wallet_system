@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :sessions, only: [:create, :destroy]
 
+  resources :user, only: [:index, :show, :create, :update, :destroy]
+
   # Define routes for Wallets
   resources :wallets, only: [:index, :show, :create, :update] do
     # Route for transactions in a specific wallet
